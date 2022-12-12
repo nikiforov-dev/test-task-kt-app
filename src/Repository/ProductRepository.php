@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ProductRepository extends ServiceEntityRepository
@@ -27,5 +28,13 @@ class ProductRepository extends ServiceEntityRepository
         if ($flush) {
            $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return Query
+     */
+    public function getAllProductsQuery(): Query
+    {
+        return $this->createQueryBuilder('p')->getQuery();
     }
 }

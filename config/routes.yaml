@@ -8,3 +8,6 @@ health-check:
     path: /health-check
     controller: App\Controller\HealthCheckAction
 
+products:
+    path: /products
+    controller: App\Controller\App\ProductController::productsAction

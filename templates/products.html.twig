@@ -1,0 +1,33 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Products
+{% endblock %}
+
+{% block body %}
+<div class="products container">
+{% for product in products %}
+    <div class="product container-fluid" value="{{ product.id }}">
+        <div class="product_name">
+            <h3>{{ product.name }}</h3>
+        </div>
+        <div class="product_category">
+            <span>Категория:</span>
+            <div>{{ product.category }}</div>
+        </div>
+        <div class="product_description">
+            <span>Описание:</span>
+            <div>{{ product.description }}</div>
+        </div>
+        <div class="product_weight">
+            <span>Вес:</span>
+            <div>{{ product.description }}</div>
+        </div>
+    </div>
+    <hr>
+{% endfor %}
+    <div class="navigation container">
+        {{ knp_pagination_render(products) }}
+    </div>
+</div>
+{% endblock %}
