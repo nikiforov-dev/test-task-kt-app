@@ -44,5 +44,8 @@ reload-db-test: check-reload-db
 	$(CONSOLE) doctrine:database:create --env=test
 	$(CONSOLE) doctrine:schema:create --env=test
 
+load-fixtures:
+	$(CONSOLE) doctrine:fixtures:load --env=test
+
 
 ###< Doctrine ###
