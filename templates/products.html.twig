@@ -3,9 +3,161 @@
 {% block title %}Products{% endblock %}
 
 {% block body %}
+    {# FILTERS SAVE VALUE #}
+    {% if query.id is defined and query.id is not null %}
+        {% set idvalue = 'value=' ~ query.id %}
+    {% else %}
+        {% set idvalue = '' %}
+    {% endif %}
+
+    {% if query.name is defined and query.name is not null %}
+        {% set namevalue = 'value=' ~ query.name %}
+    {% else %}
+        {% set namevalue = '' %}
+    {% endif %}
+
+    {% if query.category is defined and query.category is not null %}
+        {% set categoryvalue = 'value=' ~ query.category %}
+    {% else %}
+        {% set categoryvalue = '' %}
+    {% endif %}
+
+    {% if query.description is defined and query.description is not null %}
+        {% set descriptionvalue = 'value=' ~ query.description|raw ~ '' %} {# TODO пропадает фильтр дескрипшн #}
+    {% else %}
+        {% set descriptionvalue = '' %}
+    {% endif %}
+
+    {% if query.fromWeight is defined and query.fromWeight is not null %}
+        {% set fromweightvalue = 'value=' ~ query.fromWeight %}
+    {% else %}
+        {% set fromweightvalue = '' %}
+    {% endif %}
+
+    {% if query.toWeight is defined and query.toWeight is not null %}
+        {% set toweightvalue = 'value=' ~ query.toWeight %}
+    {% else %}
+        {% set toweightvalue = '' %}
+    {% endif %}
+
+
+    {# ORDER_BY SAVE VALUE #}
+    {% if query.orderBy is not defined or query.orderBy is null or query.orderBy == 'fake' %}
+        {% set orderbyfake = 'selected' %}
+    {% else %}
+        {% set orderbyfake = '' %}
+    {% endif %}
+
+    {% if query.orderBy is defined and query.orderBy is not null and query.orderBy == 'id' %}
+        {% set orderbyid = 'selected' %}
+    {% else %}
+        {% set orderbyid = '' %}
+    {% endif %}
+
+    {% if query.orderBy is defined and query.orderBy is not null and query.orderBy == 'name' %}
+        {% set orderbyname = 'selected' %}
+    {% else %}
+        {% set orderbyname = '' %}
+    {% endif %}
+
+    {% if query.orderBy is defined and query.orderBy is not null and query.orderBy == 'category' %}
+        {% set orderbycategory = 'selected' %}
+    {% else %}
+        {% set orderbycategory = '' %}
+    {% endif %}
+
+    {% if query.orderBy is defined and query.orderBy is not null and query.orderBy == 'description' %}
+        {% set orderbydescription = 'selected' %}
+    {% else %}
+        {% set orderbydescription = '' %}
+    {% endif %}
+
+    {% if query.orderBy is defined and query.orderBy is not null and query.orderBy == 'weight' %}
+        {% set orderbyweight = 'selected' %}
+    {% else %}
+        {% set orderbyweight = '' %}
+    {% endif %}
+
+    {# DIRECTION SAVE VALUE #}
+    {% if query.direction is not defined or query.direction is null or query.direction == 'fake' %}
+        {% set directionfake = 'selected' %}
+    {% else %}
+        {% set directionfake = '' %}
+    {% endif %}
+
+    {% if query.direction is defined and query.direction is not null and query.direction == 'ASC' %}
+        {% set directionasc = 'selected' %}
+    {% else %}
+        {% set directionasc = '' %}
+    {% endif %}
+
+    {% if query.direction is defined and query.direction is not null and query.direction == 'DESC' %}
+        {% set directiondesc = 'selected' %}
+    {% else %}
+        {% set directiondesc = '' %}
+    {% endif %}
+
+<form action="/products" class="container" style="border-style: solid; border-width: 1px; border-radius: 10px; width: 50%; height: 25%">
+    <div class="form-group">
+        <label>Id</label>
+        <input type="number" class="form-control" id="id" name="id" {{ idvalue }}>
+    </div>
+    <div class="form-group">
+        <label>Name</label>
+        <input type="search" class="form-control" id="name" name="name" {{ namevalue }}>
+    </div>
+    <div class="form-group">
+        <label>Category</label>
+        <input type="search" class="form-control" id="category" name="category" {{ categoryvalue }}>
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <input type="search" class="form-control" id="description" name="description" {{ descriptionvalue }}>
+    </div>
+    <div class="form-group">
+        <label>From weight</label>
+        <input type="number" min="0" class="form-control" id="fromweight" name="fromWeight" {{ fromweightvalue }}>
+    </div>
+    <div class="form-group">
+        <label>To weight</label>
+        <input type="number" min="0" class="form-control" id="toweight" name="toWeight" {{ toweightvalue }}>
+    </div>
+
+    {# Order By #}
+    <div class="form-group">
+        <label>Order by</label>
+        <select class="form-select" id="orderby">
+            <option {{ orderbyfake }} value="fake">select an option</option>
+            <option {{ orderbyid }} value="id">ID</option>
+            <option {{ orderbyname }} value="name">Name</option>
+            <option {{ orderbycategory }} value="category">Category</option>
+            <option {{ orderbydescription }} value="description">Description</option>
+            <option {{ orderbyweight }} value="weight">Weight</option>
+        </select>
+        <label>Order Direction</label>
+        <select class="form-select" id="direction">
+            <option {{ directionfake }} value="fake">select an option</option>
+            <option {{ directionasc }} value="ASC">ASC</option>
+            <option {{ directiondesc }} value="DESC">DESC</option>
+        </select>
+    </div><br>
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+    <br>
+</form>
+
+<hr>
+
+{# <div>{{ knp_pagination_filter(products, {'p.name': 'Name', 'p.category': 'Category', 'p.description': 'Description', 'p.weight': 'Weight' }) }}</div> #}
 <div class="products container">
+    <div class="navigation container">
+        {{ knp_pagination_render(products) }}
+    </div>
 {% for product in products %}
     <div class="product container-fluid" value="{{ product.id }}">
+        <div class="product_name">
+            <h3>{{ product.id }}</h3>
+        </div>
         <div class="product_name">
             <h3>{{ product.name }}</h3>
         </div>
@@ -19,7 +171,7 @@
         </div>
         <div class="product_weight">
             <span>Вес:</span>
-            <div>{{ product.description }}</div>
+            <div>{{ product.weight }}</div>
         </div>
     </div>
     <hr>
@@ -28,4 +180,70 @@
         {{ knp_pagination_render(products) }}
     </div>
 </div>
+{% endblock %}
+
+{% block logic %}
+<script>
+$(document).ready(function ($) {
+    let $form = $('form');
+
+    let filterIdsToNames = {
+        id: 'id',
+        name: 'name',
+        category: 'category',
+        description: 'description',
+        fromweight: 'fromWeight',
+        toweight: 'toWeight',
+    }
+
+    $form.submit(function (event) {
+        event.preventDefault();
+
+        let anyFilters = false;
+
+        // delete name prop due to not sending empty queries
+        Object.keys(filterIdsToNames).forEach(function (id) {
+            let element = $form.find(`#${id}`);
+            let isValueSet = Boolean(element.val());
+
+            if (!isValueSet) {
+                element.prop('name', '');
+
+                return;
+            }
+
+            anyFilters = true;
+        });
+
+        let queryString = "";
+
+        if (anyFilters) {
+            queryString += $form.serialize();
+        }
+
+        // apply orderBy
+        let orderBy   = $('#orderby').find(":selected").val();
+        let direction = $('#direction').find(":selected").val();
+
+
+        if (orderBy && orderBy !== 'fake' && direction) {
+            let orderByQuery = `orderBy=${orderBy}&direction=${direction}`;
+
+            if (anyFilters) {
+                queryString += '&' + orderByQuery;
+            } else {
+                queryString += orderByQuery;
+            }
+        }
+
+        if (queryString.length > 0) {
+            queryString = '?' + queryString;
+        }
+
+        window.location.replace("/products" + queryString);
+
+        return false;
+    });
+});
+</script>
 {% endblock %}
