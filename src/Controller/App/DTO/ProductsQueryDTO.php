@@ -235,12 +235,12 @@ class ProductsQueryDTO
     /**
      * @return array
      */
-    public function getFilterData(): array
+    public function calculateFilterData(): array
     {
         $filterData = [];
 
         foreach ($this as $propertyName => $propertyValue) {
-            if (isset(self::ORDER_BY_PROPERTIES[$propertyName]) || is_null($propertyValue)) {
+            if (array_key_exists($propertyName, self::ORDER_BY_PROPERTIES) || is_null($propertyValue)) {
                 continue;
             }
 
@@ -253,7 +253,7 @@ class ProductsQueryDTO
     /**
      * @return array
      */
-    public function getOrderByData(): array
+    public function calculateOrderByData(): array
     {
         $orderBy   = $this->orderBy;
         $direction = $this->direction;
@@ -279,12 +279,16 @@ class ProductsQueryDTO
         $orderByData = [];
 
         foreach ($this as $propertyName => $propertyValue) {
-            if ($this->orderBy !== $propertyName || isset(self::ORDER_BY_PROPERTIES[$propertyName])) {
+            if ($this->orderBy !== $propertyName || array_key_exists($propertyName, self::ORDER_BY_PROPERTIES)) {
                 continue;
             }
 
             $orderByData['orderBy'] = $propertyName;
             break;
+        }
+
+        if (!isset($orderByData['orderBy'])) {
+            return [];
         }
 
         $orderByData['direction'] = $direction;

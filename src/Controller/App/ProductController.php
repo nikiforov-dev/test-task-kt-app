@@ -67,8 +67,8 @@ class ProductController extends AbstractController
     {
         $query = $this->handleProductsQuery($request);
 
-        $filterData   = $query->getFilterData();
-        $orderByData  = $query->getOrderByData();
+        $filterData   = $query->calculateFilterData();
+        $orderByData  = $query->calculateOrderByData();
 
         $qb = $this->productRepository->getAllQB();
 
