@@ -97,7 +97,7 @@
         {% set directiondesc = '' %}
     {% endif %}
 
-<form action="/products" class="container" style="border-style: solid; border-width: 1px; border-radius: 10px; width: 50%; height: 25%">
+<form action="/products" class="container" style="margin: 0; border-style: solid; border-width: 1px; border-radius: 10px; border-color: #E0BEA2; width: 50%; height: 25%; padding: 30px;">
     <div class="form-group">
         <label>Id</label>
         <input type="number" class="form-control" id="id" name="id" {{ idvalue }}>
@@ -124,7 +124,6 @@
     </div>
 
     {# Order By #}
-    <div class="form-group">
         <label>Order by</label>
         <select class="form-select" id="orderby">
             <option {{ orderbyfake }} value="fake">select an option</option>
@@ -135,31 +134,31 @@
             <option {{ orderbyweight }} value="weight">Weight</option>
         </select>
         <label>Order Direction</label>
-        <select class="form-select" id="direction">
+        <select class="form-select" id="direction" disabled>
             <option {{ directionfake }} value="fake">select an option</option>
             <option {{ directionasc }} value="ASC">ASC</option>
             <option {{ directiondesc }} value="DESC">DESC</option>
         </select>
-    </div><br>
+    <br>
 
-    <button type="submit" class="btn btn-primary">Filter</button>
+    <button type="submit" class="btn btn-primary" style="background-color: #E0BEA2; border-color: #E0BEA2">Filter</button>
     <br>
 </form>
 
 <hr>
 
 {# <div>{{ knp_pagination_filter(products, {'p.name': 'Name', 'p.category': 'Category', 'p.description': 'Description', 'p.weight': 'Weight' }) }}</div> #}
-<div class="products container">
+<div class="products container" style="margin: 0;">
     <div class="navigation container">
         {{ knp_pagination_render(products) }}
     </div>
 {% for product in products %}
-    <div class="product container-fluid" value="{{ product.id }}">
+    <div class="product container-fluid" value="{{ product.id }}" style="border: 1px solid #E0BEA2; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
         <div class="product_name">
-            <h3>{{ product.id }}</h3>
+            <h3>ID: {{ product.id }}</h3>
         </div>
         <div class="product_name">
-            <h3>{{ product.name }}</h3>
+            <h3>Name: {{ product.name }}</h3>
         </div>
         <div class="product_category">
             <span>Категория:</span>
@@ -171,10 +170,10 @@
         </div>
         <div class="product_weight">
             <span>Вес:</span>
-            <div>{{ product.weight }}</div>
+            <div>{{ product.weight }} г.</div>
         </div>
     </div>
-    <hr>
+{#    <hr>#}
 {% endfor %}
     <div class="navigation container">
         {{ knp_pagination_render(products) }}
@@ -184,7 +183,26 @@
 
 {% block logic %}
 <script>
-$(document).ready(function ($) {
+    document.addEventListener('DOMContentLoaded', () => {
+        const direction = document.querySelector('#direction');
+        const orderBy = document.querySelector('#orderby');
+
+        if (direction.value !== 'fake') {
+            direction.removeAttribute('disabled');
+        }
+
+        const handleSelect = (e) => {
+            if (e.target.value !== 'fake') {
+                direction.removeAttribute('disabled');
+            } else {
+                direction.setAttribute('disabled', 'disabled');
+                direction.value = 'fake';
+            }
+        }
+        orderBy.addEventListener('change', handleSelect);
+    })
+
+    $(document).ready(function ($) {
     let $form = $('form');
 
     let filterIdsToNames = {
