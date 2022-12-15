@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Import{% endblock %}
+
+{% block body %}
+<form style="display: flex; justify-content: center">
+    <label for="loadFile">Load file</label>
+    <input id="loadFile" type="file" accept="text/xml">
+    <button id="submit">Submit</button>
+</form>
+{% endblock %}
+
+{% block logic %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const submit = document.querySelector('#submit');
+            const loadFile = document.querySelector('#loadFile');
+            loadFile.addEventListener('click', (e) => {
+                console.log(e)
+            })
+            submit.addEventListener('click', async (e) => {
+                e.preventDefault();
+                submit.setAttribute('disabled', 'disabled');
+                loadFile.setAttribute('disabled', 'disabled');
+                const data = new FormData();
+                data.append('import_file', loadFile.files[0]);
+                fetch('/upload', {
+                    method: 'POST',
+                    body: data,
+                })
+                    .then((response) => {
+                        submit.removeAttribute('disabled');
+                        loadFile.removeAttribute('disabled');
+                        return response.json();
+                    })
+                    .catch(console.log)
+            })
+        })
+    </script>
+{% endblock %}

@@ -11,3 +11,14 @@ health-check:
 products:
     path: /products
     controller: App\Controller\App\ProductController::productsAction
+
+import:
+    path: /import
+    controller: App\Controller\App\ImportProductsController::importProductsAction
+
+
+upload:
+    path: /upload
+    controller: App\Controller\App\ImportProductsController::uploadXmlFileAction
+    methods:
+        - POST
