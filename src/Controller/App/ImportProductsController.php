@@ -2,6 +2,7 @@
 
 namespace App\Controller\App;
 
+use App\Repository\ProductsImportRepository;
 use App\Utils\FileUploader\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -14,13 +15,16 @@ use Throwable;
 class ImportProductsController extends AbstractController
 {
     /**
-     * @var FileUploader
+     * @var ProductsImportRepository
      */
-    private FileUploader $fileUploader;
+    private ProductsImportRepository $productsImportRepository;
 
-    public function __construct(FileUploader $fileUploader)
+    /**
+     * @param ProductsImportRepository $productsImportRepository
+     */
+    public function __construct(ProductsImportRepository $productsImportRepository)
     {
-        $this->fileUploader = $fileUploader;
+        $this->productsImportRepository = $productsImportRepository;
     }
 
     /**
@@ -48,7 +52,7 @@ class ImportProductsController extends AbstractController
         }
 
         try {
-            $this->fileUploader->upload($file);
+            $this->productsImportRepository->createProductsImportWithFileUpload($file);
         } catch (Throwable $e) {
             return new JsonResponse("Can`t upload file! Reason: {$e->getMessage()}", 400);
         }

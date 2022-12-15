@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+            name="App\Entity\ProductsImport"
+            table="product_imports"
+            repository-class="App\Repository\ProductsImportRepository">
+
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="importXmlFile" type="string" column="import_xml_file" nullable="false"/>
+        <field name="reportCsvFile" type="string" column="report_csv_File" nullable="true" />
+        <field name="processed" type="boolean" column="processed" nullable="true" />
+        <field name="createdAt" type="datetime" column="created_at" nullable="false" />
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="prePersist"/>
+        </lifecycle-callbacks>
+
+    </entity>
+</doctrine-mapping>
