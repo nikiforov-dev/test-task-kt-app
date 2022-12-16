@@ -147,11 +147,11 @@
 
 <hr>
 
-{# <div>{{ knp_pagination_filter(products, {'p.name': 'Name', 'p.category': 'Category', 'p.description': 'Description', 'p.weight': 'Weight' }) }}</div> #}
 <div class="products container" style="margin: 0;">
     <div class="navigation container">
         {{ knp_pagination_render(products) }}
     </div>
+    <div>Products total count: {{ products.totalItemCount }}</div>
 {% for product in products %}
     <div class="product container-fluid" value="{{ product.id }}" style="border: 1px solid #E0BEA2; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
         <div class="product_name">
@@ -161,19 +161,18 @@
             <h3>Name: {{ product.name }}</h3>
         </div>
         <div class="product_category">
-            <span>Категория:</span>
+            <span>Category:</span>
             <div>{{ product.category }}</div>
         </div>
         <div class="product_description">
-            <span>Описание:</span>
+            <span>Description:</span>
             <div>{{ product.description }}</div>
         </div>
         <div class="product_weight">
-            <span>Вес:</span>
-            <div>{{ product.weight }} г.</div>
+            <span>Weight:</span>
+            <div>{{ product.weight }} g.</div>
         </div>
     </div>
-{#    <hr>#}
 {% endfor %}
     <div class="navigation container">
         {{ knp_pagination_render(products) }}
