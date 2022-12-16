@@ -3,6 +3,7 @@
 namespace App\Entity\Factory;
 
 use App\Entity\Product;
+use App\Entity\ProductsImport;
 
 class ProductFactory
 {
@@ -14,7 +15,7 @@ class ProductFactory
      *
      * @return Product
      */
-    public static function create(string $name, string $description, int $weight, string $category): Product
+    public static function create(string $name, string $description, int $weight, string $category, ProductsImport|null $productsImport = null): Product
     {
         return (new Product())
             ->setId(null)
@@ -22,6 +23,7 @@ class ProductFactory
             ->setDescription($description)
             ->setWeight($weight)
             ->setCategory($category)
+            ->setProductsImport($productsImport)
         ;
     }
 }

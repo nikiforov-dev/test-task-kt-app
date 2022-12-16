@@ -11,8 +11,13 @@
 
         <field name="importXmlFile" type="string" column="import_xml_file" nullable="false"/>
         <field name="reportCsvFile" type="string" column="report_csv_File" nullable="true" />
-        <field name="processed" type="boolean" column="processed" nullable="true" />
+        <field name="status" type="string" column="status" nullable="false" />
         <field name="createdAt" type="datetime" column="created_at" nullable="false" />
+
+        <field name="count" type="integer" column="count" nullable="true" />
+        <field name="alreadyLoaded" type="integer" column="already_loaded" nullable="true" />
+
+        <field name="error" type="text" column="error" nullable="true" />
 
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="prePersist"/>

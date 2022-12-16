@@ -13,5 +13,10 @@
         <field name="description" type="text" column="description" />
         <field name="weight" type="integer" column="weight" />
         <field name="category" type="string" column="category" />
+
+        <many-to-one field="productsImport" target-entity="App\Entity\ProductsImport">
+            <join-column name="products_import_id" nullable="true" />
+        </many-to-one>
+
     </entity>
 </doctrine-mapping>

@@ -17,8 +17,10 @@ class ProductsImportFactory
             ->setId(null)
             ->setImportXmlFile($xmlFileName)
             ->setReportCsvFile(null)
-            ->setProcessed(null)
+            ->setStatus(ProductsImport::UNPROCESSED)
             ->setCreatedAt(null)
+            ->setCount(null)
+            ->setAlreadyLoaded(null)
         ;
     }
 }

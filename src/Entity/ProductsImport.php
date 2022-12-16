@@ -6,6 +6,11 @@ use DateTime;
 
 class ProductsImport
 {
+    public const UNPROCESSED = 'UNPROCESSED';
+    public const PROCESSING  = 'PROCESSING';
+    public const FINISHED    = 'FINISHED';
+    public const ERROR       = 'ERROR';
+
     /**
      * @var int|null
      */
@@ -22,14 +27,29 @@ class ProductsImport
     private ?string $reportCsvFile = null;
 
     /**
-     * @var bool|null
+     * @var string
      */
-    private ?bool $processed = null;
+    private string $status = self::UNPROCESSED;
 
     /**
      * @var DateTime|null
      */
     private ?DateTime $createdAt = null;
+
+    /**
+     * @var string|null
+     */
+    private ?string $error = null;
+
+    /**
+     * @var int|null
+     */
+    private ?int $count = null;
+
+    /**
+     * @var int|null
+     */
+    private ?int $alreadyLoaded = null;
 
     /**
      * @return int|null
@@ -92,21 +112,21 @@ class ProductsImport
     }
 
     /**
-     * @return bool|null
+     * @return string
      */
-    public function getProcessed(): ?bool
+    public function getStatus(): string
     {
-        return $this->processed;
+        return $this->status;
     }
 
     /**
-     * @param bool|null $processed
+     * @param string $status
      *
      * @return $this
      */
-    public function setProcessed(?bool $processed): self
+    public function setStatus(string $status): self
     {
-        $this->processed = $processed;
+        $this->status = $status;
 
         return $this;
     }
@@ -137,6 +157,66 @@ class ProductsImport
     public function prePersist(): self
     {
         $this->createdAt = new DateTime();
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getError(): ?string
+    {
+        return $this->error;
+    }
+
+    /**
+     * @param string|null $error
+     *
+     * @return $this
+     */
+    public function setError(?string $error): self
+    {
+        $this->error = $error;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCount(): ?int
+    {
+        return $this->count;
+    }
+
+    /**
+     * @param int|null $count
+     *
+     * @return $this
+     */
+    public function setCount(?int $count): self
+    {
+        $this->count = $count;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getAlreadyLoaded(): ?int
+    {
+        return $this->alreadyLoaded;
+    }
+
+    /**
+     * @param int|null $alreadyLoaded
+     *
+     * @return $this
+     */
+    public function setAlreadyLoaded(?int $alreadyLoaded): self
+    {
+        $this->alreadyLoaded = $alreadyLoaded;
 
         return $this;
     }

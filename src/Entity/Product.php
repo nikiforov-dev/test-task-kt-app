@@ -30,6 +30,11 @@ class Product
     private int $weight;
 
     /**
+     * @var ProductsImport|null
+     */
+    private ?ProductsImport $productsImport = null;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -125,6 +130,26 @@ class Product
     public function setWeight(int $weight): self
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return ProductsImport|null
+     */
+    public function getProductsImport(): ?ProductsImport
+    {
+        return $this->productsImport;
+    }
+
+    /**
+     * @param ProductsImport|null $productsImport
+     *
+     * @return $this
+     */
+    public function setProductsImport(?ProductsImport $productsImport): self
+    {
+        $this->productsImport = $productsImport;
 
         return $this;
     }
