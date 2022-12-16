@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     openssl \
     git \
     zip \
+    cron \
     libzip-dev \
     gnupg2 \
     libicu-dev \
@@ -55,5 +56,12 @@ RUN git config --global alias.st status
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 COPY conf.d/*.ini /usr/local/etc/php/conf.d/
 COPY conf.d/dev/* /usr/local/etc/php/conf.d/
+
+# Setup cron
+COPY cron /etc/cron.d/cron
+RUN chmod 0644 /etc/cron.d/cron
+RUN crontab /etc/cron.d/cron
+RUN touch /var/log/cron.log
+
 
 CMD php-fpm

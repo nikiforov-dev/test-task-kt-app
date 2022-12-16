@@ -1,0 +1,2 @@
+# Process imports command
+* * * * * flock -n /tmp/app.process.imports.lock /usr/local/bin/php /app/bin/console app:process:imports >> /var/log/cron.log 2>&1
