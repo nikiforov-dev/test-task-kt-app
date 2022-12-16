@@ -3,9 +3,8 @@
 namespace App\Controller\App;
 
 use App\Repository\ProductsImportRepository;
-use App\Utils\FileUploader\FileUploader;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,16 +13,25 @@ use Throwable;
 
 class ImportProductsController extends AbstractController
 {
+    private const PRODUCTS_IMPORT_PAGE_SIZE = 10;
+
     /**
      * @var ProductsImportRepository
      */
     private ProductsImportRepository $productsImportRepository;
 
     /**
+     * @var PaginatorInterface
+     */
+    private PaginatorInterface $paginator;
+
+    /**
+     * @param PaginatorInterface $paginator
      * @param ProductsImportRepository $productsImportRepository
      */
-    public function __construct(ProductsImportRepository $productsImportRepository)
+    public function __construct(PaginatorInterface $paginator, ProductsImportRepository $productsImportRepository)
     {
+        $this->paginator                = $paginator;
         $this->productsImportRepository = $productsImportRepository;
     }
 
@@ -34,7 +42,15 @@ class ImportProductsController extends AbstractController
      */
     public function importProductsAction(Request $request): Response
     {
-        return $this->render('import.html.twig');
+        $qb = $this->productsImportRepository->getAllQB();
+
+        $pagination = $this->paginator->paginate(
+            $qb->getQuery(),
+            $request->query->getInt('page', 1),
+            self::PRODUCTS_IMPORT_PAGE_SIZE
+        );
+
+        return $this->render('import.html.twig', ['imports' => $pagination]);
     }
 
     /**
@@ -48,15 +64,14 @@ class ImportProductsController extends AbstractController
         $file = $request->files->get('import_file');
 
         if ($file === null) {
-            return new Response('Import file is missed!', 400);
+            return new JsonResponse(['error' => 'Import file is missed!'], 400);
         }
 
-        try {
-            $this->productsImportRepository->createProductsImportWithFileUpload($file);
-        } catch (Throwable $e) {
-            return new JsonResponse("Can`t upload file! Reason: {$e->getMessage()}", 400);
-        }
+        $fileName = $this->productsImportRepository->createProductsImportWithFileUpload($file);
 
-        return new JsonResponse("Uploaded", 200);
+        return new JsonResponse([
+            "status"    => "Uploaded",
+            "file_name" => $fileName
+        ], 200);
     }
 }

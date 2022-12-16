@@ -4,10 +4,58 @@
 
 {% block body %}
 <form style="display: flex; justify-content: center">
-    <label for="loadFile">Load file</label>
+    <label for="loadFile">Load file -----> </label>
     <input id="loadFile" type="file" accept="text/xml">
     <button id="submit">Submit</button>
 </form>
+<hr>
+<div class="products_imports container" style="margin: 0;">
+    <div><h3>Your product imports will be showed below, when you upload them!</h3></div>
+    <div>It is possible to create report after file was completely processed (or if was error while processing it)</div>
+    <hr><br>
+    <div class="navigation container">
+        {{ knp_pagination_render(imports) }}
+    </div>
+    {% for import in imports %}
+        <div class="import_products container-fluid" style="border: 1px solid #E0BEA2; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+            <div class="import_id">
+                <h3>ID: {{ import.id }}</h3>
+            </div>
+            {% if import.reportCsvFile is not null %}
+            <div class="import_report">
+                <span>Report:</span>
+                <a href="{{ import.reportCsvFile }}" download="import_report.csv">Download CSV Report</a>
+            </div>
+            {% endif %}
+            <div class="import_status">
+                <span>Status:</span>
+                <div>{{ import.status }}</div>
+            </div>
+            <div class="import_created_at">
+                <span>Created at:</span>
+                <div>{{ import.createdAt|date("Y-m-d H:i:s") }}</div>
+            </div>
+            {% if import.error is not null %}
+            <div class="import_error">
+                <span>Error:</span>
+                <div>{{ import.error }} г.</div>
+            </div>
+            {% endif %}
+            {% if import.count is not null %}
+            <div class="import_count">
+                <span>Products to import:</span>
+                <div>{{ import.count }}</div>
+            </div>
+            {% endif %}
+            {% if import.alreadyLoaded is not null %}
+            <div class="import_already_loaded">
+                <span>Products already loaded:</span>
+                <div>{{ import.alreadyLoaded }}</div>
+            </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}
 
 {% block logic %}
