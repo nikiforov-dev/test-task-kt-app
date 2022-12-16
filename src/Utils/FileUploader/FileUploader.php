@@ -2,12 +2,15 @@
 
 namespace App\Utils\FileUploader;
 
+use App\DependencyInjection\Trait\LoggerDependencyInjectionTrait;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class FileUploader
 {
+    use LoggerDependencyInjectionTrait;
+
     /**
      * @var string
      */
@@ -39,13 +42,9 @@ class FileUploader
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
-        try {
-            $file->move($this->getTargetDirectory(), $fileName);
-        } catch (FileException $e) {
-            // TODO:
-        }
+        $file->move($this->getTargetDirectory(), $fileName);
 
-        return $fileName;
+        return "{$this->targetDirectory}/{$fileName}";
     }
 
     /**
